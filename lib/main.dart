@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project1/amahome.dart';
 import 'package:project1/amalog.dart';
+import 'package:project1/api%20project/ProviderClass.dart';
 import 'package:project1/instagram.dart';
 import 'package:project1/post%20api/StudentRecord.dart';
 import 'package:project1/product_des.dart';
@@ -8,6 +9,7 @@ import 'package:project1/quotes/quotes.dart';
 import 'package:project1/spotify.dart';
 import 'package:project1/task2.dart';
 import 'package:project1/weather/weather.dart';
+import 'package:provider/provider.dart';
 
 import 'GetApi/Task1.dart';
 import 'ListApi/JsonComments.dart';
@@ -15,7 +17,12 @@ import 'api project/products.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context)=>ProviderClass()),
+
+    ],
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: StudentRecord(),
+      home: apiproducts(),
     );
   }
 }

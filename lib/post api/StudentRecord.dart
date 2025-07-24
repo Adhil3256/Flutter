@@ -104,7 +104,6 @@ class _StudentRecordState extends State<StudentRecord> {
 
           // Text(bodyData["count"].toString()),
     // Text(bodyData["name"]),
-
     Expanded(
     child: FutureBuilder(
       future: latedata,

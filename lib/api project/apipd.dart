@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:project1/api%20project/ProviderClass.dart';
+import 'package:provider/provider.dart';
 class appd extends StatefulWidget {
   Map<String,dynamic> a={};
   appd({super.key, required this.a});
@@ -12,6 +14,7 @@ class _appdState extends State<appd> {
 
   @override
   Widget build(BuildContext context) {
+    final cartObj=Provider.of<ProviderClass>(context);
     return Scaffold(
       appBar: AppBar(
         leading: Icon(Icons.arrow_back),
@@ -62,12 +65,19 @@ class _appdState extends State<appd> {
             SizedBox(
               height: 60,
             ),
-            Container(
-              height: 40,
-              width: 300,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.black),
-            child: Center(child: Text("Add to cart",style:TextStyle(color: Colors.white),)),
-            )
+            ElevatedButton(onPressed: (){
+              print("A is:${widget.a}");
+              Map<String,dynamic> myPdt=widget.a;
+              cartObj.addtoCart(myPdt);
+              print(cartObj.pdtCount);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Product added")));
+            }, child: Text("Add to Cart"))
+            // Container(
+            //   height: 40,
+            //   width: 300,
+            //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.black),
+            // child: Center(child: Text("Add to cart",style:TextStyle(color: Colors.white),)),
+            // )
           ],
         ),
       ),

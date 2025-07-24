@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:http/http.dart' as http;
 
+import 'ProviderClass.dart';
 import 'apipd.dart';
 class apiproducts extends StatefulWidget {
   const apiproducts({super.key});
@@ -13,7 +15,10 @@ class apiproducts extends StatefulWidget {
 
 class _apiproductsState extends State<apiproducts> {
   var bodyData={};
+  var catbodyData={};
+
   List myList=[];
+  List myCategories=[];
   Future<Map> getNation() async{
     try{
       var apiResponse=await http.get(Uri.parse("https://dummyjson.com/products"));
@@ -21,6 +26,9 @@ class _apiproductsState extends State<apiproducts> {
       print(bodyData);
       myList=bodyData["products"];
       print(myList);
+      List cat=myList.map((onePdt)=>onePdt["category"]).toList();
+
+      print(cat.toSet());
       if(apiResponse.statusCode==200||apiResponse==201){
         return bodyData;
       }
@@ -33,9 +41,32 @@ class _apiproductsState extends State<apiproducts> {
     }
   }
 
+  // Future<Map> getcat() async{
+  //   try{
+  //     var apiResponse=await http.get(Uri.parse("https://dummyjson.com/products/category-list"),);
+  //
+  //     catbodyData=jsonDecode(apiResponse.body);
+  //     print(bodyData);
+  //     myList=bodyData["products"];
+  //     print(myList);
+  //     if(apiResponse.statusCode==200||apiResponse==201){
+  //       return bodyData;
+  //     }
+  //     else{
+  //       print(apiResponse.statusCode);
+  //       throw Exception(("Failed to load data"));
+  //     }}
+  //   catch(e){
+  //     throw Exception(e);
+  //   }
+  // }
+
+
 
   @override
   Widget build(BuildContext context) {
+    final cartObj=Provider.of<ProviderClass>(context);
+    //int countOfPdts=cartObj.cartProducts.length;
     return Scaffold(
       backgroundColor: Colors.red,
       appBar: AppBar(
@@ -57,15 +88,18 @@ class _apiproductsState extends State<apiproducts> {
             ),
           ),
         ),
+
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Icon(Icons.shopping_cart),
-          )
-        ],
-      ),
-        body:
-        FutureBuilder(future: getNation(), builder: (context,snapshot)
+        CircleAvatar(
+          radius: 18,
+          child: Text(
+            cartObj.pdtCount.toString()
+
+          ),
+
+        ),
+    ]),
+        body: FutureBuilder(future: getNation(), builder: (context,snapshot)
     {
           if(snapshot.connectionState==ConnectionState.waiting){
             return Center(child: CircularProgressIndicator());
@@ -77,6 +111,38 @@ class _apiproductsState extends State<apiproducts> {
             return SingleChildScrollView(
               child: Column(
                 children: [
+              // Container(
+              //   color: Colors.cyan,
+              //    height: 180,
+              //
+              //    child: ListView.builder(
+              //      scrollDirection: Axis.horizontal,
+              //        itemCount: lis2.length,
+              //        itemBuilder: (BuildContext context, int pageViewIndex) {
+              //          return Padding(
+              //            padding: const EdgeInsets.all(7.0),
+              //            child: GestureDetector(
+              //              onTap: (){
+              //                Navigator.push(
+              //                  context,
+              //                  MaterialPageRoute(builder: (context) => const pd()),
+              //                );
+              //              },
+              //              child: Container(
+              //                height: 150,
+              //                width: 150,
+              //                decoration: BoxDecoration(
+              //                    border:Border.all(),
+              //                    image: DecorationImage(
+              //                image: AssetImage(lis2[pageViewIndex].image),
+              //                                     fit: BoxFit.fill)
+              //
+              //              ),
+              //              ),
+              //            ),);
+              //        }
+              //    ),
+              //  ),
                   // Text(bodyData["count"].toString()),
                   // Text(bodyData["name"]),
               
@@ -147,6 +213,7 @@ class _apiproductsState extends State<apiproducts> {
         }
 
         )
+
   );
 
   }
